@@ -21,25 +21,25 @@ import java.util.List;
  */
 @Service
 @CacheConfig(cacheNames = "users")
-public class DemoCachingServiceImpl implements DemoCachingService {
+public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DemoCachingServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private static final Long SLEEP_PERIOD = 3000L;
+    private static final Long WAIT_TIME = 3000L;
 
     @Autowired
     private UserRepository userRepository;
 
     @Transactional
     @Override
-    @Cacheable()
+    @Cacheable
     //condition = "#id == 2"
     //unless = "#result.username.equals('Claude.Richardson')"
     public User getUser(Long id) {
         LOGGER.info("Getting from DB the User with id: {}", id);
 
         try {
-            Thread.sleep(SLEEP_PERIOD);
+            Thread.sleep(WAIT_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -53,8 +53,7 @@ public class DemoCachingServiceImpl implements DemoCachingService {
 
     @Transactional
     @Override
-    @CacheEvict(allEntries = true)
-    public List<User> findAllUsers() {
+    public List<User> getUsers() {
         Iterable<User> iterator = userRepository.findAll();
 
         List<User> userList = new ArrayList<>();
@@ -66,7 +65,7 @@ public class DemoCachingServiceImpl implements DemoCachingService {
     @Transactional
     @Override
     @CachePut(key = "#id")
-    public User updateUser(Long id, String firstName, String lastName) {
+    public User createOrUpdateUser(Long id, String firstName, String lastName) {
         User user = userRepository.findOne(id);
 
         user.setFirstName(firstName);
@@ -75,4 +74,10 @@ public class DemoCachingServiceImpl implements DemoCachingService {
         return userRepository.save(user);
     }
 
+    @Transactional
+    @Override
+    @CacheEvict
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
+    }
 }

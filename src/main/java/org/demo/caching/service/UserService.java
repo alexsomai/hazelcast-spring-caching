@@ -8,12 +8,13 @@ import java.util.List;
  * @author Alexandru Somai
  *         date 7/4/2015
  */
-public interface DemoCachingService {
+public interface UserService {
 
     User getUser(Long id);
 
-    List<User> findAllUsers();
+    List<User> getUsers();
 
-    User updateUser(Long id, String firstName, String lastName);
+    User createOrUpdateUser(Long id, String firstName, String lastName);
 
+    void deleteUser(Long id);
 }

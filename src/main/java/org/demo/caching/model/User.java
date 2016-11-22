@@ -4,8 +4,6 @@ package org.demo.caching.model;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.DataSerializable;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -85,7 +83,14 @@ public class User implements DataSerializable {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", isActive=" + isActive +
+                '}';
     }
 
     @Override
@@ -107,5 +112,4 @@ public class User implements DataSerializable {
         lastName = in.readUTF();
         isActive = in.readBoolean();
     }
-
 }
